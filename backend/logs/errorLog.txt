@@ -1,1 +1,19 @@
-20230212	15:55:43	6a9a3979-423a-40e8-afd0-be0337193320	TypeError: fsPromises.readFil is not a function
+20230213	11:26:50	3c9df651-0702-4b85-a9c4-6d0d98193d84	Error: Not allowed by CORS
+20230213	14:59:12	83faed71-9edd-462e-a2b1-f228cde9b3c6	RangeError: Invalid status code: { id: 1, firstname: 'James', lastname: 'Brown' }
+20230213	15:06:30	239a51a2-90a2-434d-8046-7d34f826708d	SyntaxError: Unexpected token o in JSON at position 1
+20230213	15:10:30	6ab121b8-14e4-420c-a713-06f3df18fc06	RangeError: Invalid status code: 4
+20230213	15:17:27	8c8cc115-66d9-48ad-b05a-b3cfcfb5fed1	SyntaxError: Unexpected token f in JSON at position 10
+20230213	15:17:39	6b54ab2a-36fb-4e31-87cd-4f32d4801ecf	Error: Cannot set headers after they are sent to the client
+20230213	15:17:58	706c0d72-039d-48e1-a32c-0a82c7a57a97	Error: Cannot set headers after they are sent to the client
+20230213	15:26:24	9bef52bb-6c85-4994-bddf-efc29f8bfd6c	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	15:28:07	1a7f036e-7222-4979-bd35-dbe4a313f778	TypeError: Found non-callable @@iterator
+20230213	15:28:14	56eb1bd4-a85b-4c93-8394-dbc23aaf6b17	TypeError: Found non-callable @@iterator
+20230213	15:31:56	2fad935c-8cf6-4ffc-9294-064f59b907f5	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	15:32:18	20e5a6b6-b89d-4979-87c8-3d2017c549da	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	15:32:45	c6307430-a5dd-417e-ae0a-123c4fc0040d	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	15:36:47	924083e7-08e4-414a-b9f2-7e276ef52606	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	15:38:40	87c86e9f-a2fc-4042-a8b8-75048e9387a6	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	15:38:54	4de60b07-fc3b-4a63-a812-43528eafcef7	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	15:39:09	cf4bd774-2d71-4513-bc45-ac738db3d4d8	TypeError: Found non-callable @@iterator
+20230213	15:44:30	d3e3dbf0-07d0-4c6c-81af-ad2b50a0518e	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	15:45:12	27e01c72-5b09-4d4c-b63f-493cef0bc43c	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
