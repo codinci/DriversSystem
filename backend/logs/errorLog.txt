@@ -17,3 +17,4 @@
 20230213	15:39:09	cf4bd774-2d71-4513-bc45-ac738db3d4d8	TypeError: Found non-callable @@iterator
 20230213	15:44:30	d3e3dbf0-07d0-4c6c-81af-ad2b50a0518e	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
 20230213	15:45:12	27e01c72-5b09-4d4c-b63f-493cef0bc43c	TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))
+20230213	21:06:43	71c607a7-9774-453a-8d33-57700b5002ba	TypeError: Cannot set properties of undefined (setting 'lastname')
