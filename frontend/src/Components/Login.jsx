@@ -1,18 +1,22 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
-import AuthContext from "../context/AuthContext";
+import useAuth from "../hooks/useAuth";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const LOGIN_URL = "/auth";
 
 const Login = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
   const userRef = useRef();
   const errRef = useRef();
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
 
   useEffect(() => {
     userRef.current.focus();
@@ -44,7 +48,7 @@ const Login = () => {
       setAuth({ user, pwd, roles, accessToken });
       setUser("");
       setPwd("");
-      setSuccess(true);
+      navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No response from the server");
@@ -60,16 +64,6 @@ const Login = () => {
   };
 
   return (
-    <>
-      {success ? (
-        <section>
-          <h1>You are logged in!</h1>
-          <br />
-          <p>
-            <a href="#">Go to Home</a>
-          </p>
-        </section>
-      ) : (
         <section>
           <p
             ref={errRef}
@@ -107,8 +101,6 @@ const Login = () => {
             </p>
           </form>
         </section>
-      )}
-    </>
   );
 };
 
