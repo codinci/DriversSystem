@@ -1,57 +1,54 @@
-const usersDB = {
-	users: require('../model/users.json'),
-	setUsers: function (data) {this.users = data}
-}
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-const fsPromises = require('fs').promises;
-const path = require('path');
+const User = require("../model/User.js");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 
 const handleLogin = async (req, res) => {
   const { user, pwd } = req.body;
+  console.log(user, pwd);
   if (!user || !pwd)
     return res.status(400).json({ message: "Username or password required" });
 
   //ensure user exists
-  const foundUser = usersDB.users.find((person) => person.username === user);
+  const foundUser = await User.findOne({ username: user }).exec();
   if (!foundUser)
     return res.status(401).json({ message: "User does not exist" });
 
+
+  //compare password in the db to one in the request
   const matchPwd = await bcrypt.compare(pwd, foundUser.password);
+  console.log(matchPwd)
   if (matchPwd) {
-    const roles = Object.values(foundUser.roles);
+    const roles = Object.values(foundUser.roles).filter(Boolean);
     const accessToken = jwt.sign(
       {
-        "UserInfo": {
-          "username": foundUser.username,
-          "roles": roles
-        }
+        UserInfo: {
+          username: foundUser.username,
+          roles: roles,
+        },
       },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "30s" }
     );
+
     const refreshToken = jwt.sign(
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
     );
-    const otherUsers = usersDB.users.filter(
-      (person) => person.username !== foundUser.username
-    );
-    const currentUser = { ...foundUser, refreshToken };
-    usersDB.setUsers([...otherUsers, currentUser]);
-    await fsPromises.writeFile(
-      path.join(__dirname, "..", "model", "users.json"),
-      JSON.stringify(usersDB.users)
-    );
+
+    foundUser.refreshToken = refreshToken;
+    const result = await foundUser.save();
+    console.log(result);
+
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       sameSite: "None",
-      secure: false,
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
-    });
-    res.json({ accessToken });
+    });// set secure to true in production
+
+    res.json({ roles, accessToken });
   } else {
     res.status(401).json({ message: "Incorrect password" });
   }
