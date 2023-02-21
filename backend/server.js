@@ -45,7 +45,7 @@ app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
 
 app.use(verifyJWT);
-// app.use("/drivers", require("./routes/api/drivers"));
+app.use("/drivers", require("./routes/api/drivers"));
 
 // route handlers
 app.get(
