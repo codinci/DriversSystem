@@ -5,7 +5,9 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "../api/axios";
+import useAuth from "../hooks/useAuth";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -28,7 +30,12 @@ const Register = () => {
   const [matchFocus, setMatchFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
+
+  const { setAuth } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
     userRef.current.focus();
@@ -76,7 +83,13 @@ const Register = () => {
       console.log(response.data);
       console.log(response.accessToke);
       console.log(JSON.stringify(response));
-      setSuccess(true);
+      const accessToken = response?.data?.accessToken;
+      const roles = response?.data?.roles;
+      setAuth({ user, pwd, roles, accessToken });
+      setUser("");
+      setPwd("");
+      setMatchPwd('');
+      navigate(from, { replace: true });
       //clear input fields on the registration form
     } catch (err) {
       if (!err?.response) {
@@ -91,15 +104,7 @@ const Register = () => {
   };
 
   return (
-    <>
-      {success ? (
-        <section>
-          <h1>Success!</h1>
-          <p>
-            <a href="#">Sign In</a>
-          </p>
-        </section>
-      ) : (
+
         <section>
           <p
             ref={errRef}
@@ -239,13 +244,12 @@ const Register = () => {
               <br />
               <span className="line">
                 {/* Enter sign in router link here */}
-                <a href="#">Sign In</a>
+                <Link to="/login">Sign In</Link>
               </span>
             </p>
           </form>
         </section>
-      )}
-    </>
+
   );
 };
 
