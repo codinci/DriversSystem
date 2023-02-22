@@ -2,17 +2,21 @@ import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import useInput from "../hooks/useInput";
+import useToggle from "../hooks/useToggle";
 
 const LOGIN_URL = "/auth";
 
 const Login = () => {
-  const { setAuth, persist, setPersist } = useAuth();
+  const { setAuth } = useAuth();
   const userRef = useRef();
   const errRef = useRef();
 
-  const [user, setUser] = useState("");
+  const [user, resetUser, userAttributes] = useInput("user", "");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
+
+  const [check, toggleCheck] = useToggle('persist', false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,7 +50,8 @@ const Login = () => {
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
       setAuth({ user, pwd, roles, accessToken });
-      setUser("");
+      // setUser("");
+      resetUser();
       setPwd("");
       navigate(from, { replace: true });
     } catch (err) {
@@ -63,13 +68,13 @@ const Login = () => {
     }
   };
 
-  const togglePersist = () => {
-    setPersist((prev) => !prev);
-  };
+  // const togglePersist = () => {
+  //   setPersist((prev) => !prev);
+  // };
 
-  useEffect(() => {
-    localStorage.setItem("persist", persist);
-  }, [persist]);
+  // useEffect(() => {
+  //   localStorage.setItem("persist", persist);
+  // }, [persist]);
 
   return (
     <section>
@@ -87,8 +92,8 @@ const Login = () => {
           type="text"
           id="username"
           ref={userRef}
-          autoComplete="on"
-          onChange={(e) => setUser(e.target.value)}
+          autoComplete="off"
+          {...userAttributes}
           required
         />
         <label htmlFor="password">Password:</label>
@@ -96,6 +101,7 @@ const Login = () => {
           type="password"
           id="password"
           onChange={(e) => setPwd(e.target.value)}
+          value={pwd}
           required
         />
         <button>Sign In</button>
@@ -103,8 +109,8 @@ const Login = () => {
           <input
             type="checkbox"
             id="persist"
-            onChange={togglePersist}
-            checked={persist}
+            onChange={toggleCheck}
+            checked={check}
           />
           <label htmlFor="persist">Trust this device</label>
         </div>
