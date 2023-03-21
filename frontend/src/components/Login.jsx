@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "../api/axios";
-import useAuth from "../hooks/useAuth";
+// import axios from "../api/axios";
+// import useAuth from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import useToggle from "../hooks/useToggle";
 
-const LOGIN_URL = "/auth";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../features/auth/authSlice";
+import { useLoginMutation } from "../features/auth/authApiSlice";
+
 
 const Login = () => {
-  const { setAuth } = useAuth();
   const userRef = useRef();
   const errRef = useRef();
 
@@ -16,11 +18,14 @@ const Login = () => {
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
-  const [check, toggleCheck] = useToggle('persist', false);
+  const [check, toggleCheck] = useToggle("persist", false);
 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     userRef.current.focus();
@@ -32,34 +37,25 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(user, pwd);
-
     try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ user, pwd }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await login({ user, pwd }).unwrap();
+      dispatch(setCredentials({ ...response, user }));
 
-      console.log(JSON.stringify(response?.data));
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
-      setAuth({ user, pwd, roles, accessToken });
+      // console.log(JSON.stringify(response?.accessToken));
+      // const accessToken = response?.accessToken;
+      // console.log(accessToken);
+      // setAuth({ user, accessToken });
       // setUser("");
       resetUser();
       setPwd("");
       navigate(from, { replace: true });
     } catch (err) {
-      if (!err?.response) {
+      console.error(err);
+      if (!err?.status) {
         setErrMsg("No response from the server");
-      } else if (err.response?.status === 400) {
+      } else if (err?.status === 400) {
         setErrMsg("Missing username or password");
-      } else if (err.response?.status === 401) {
+      } else if (err?.status === 401) {
         setErrMsg("Unauthorized");
       } else {
         setErrMsg("Login has failed");
@@ -76,7 +72,9 @@ const Login = () => {
   //   localStorage.setItem("persist", persist);
   // }, [persist]);
 
-  return (
+  const content = isLoading ? (
+    <h1>Loading ...</h1>
+  ) : (
     <section>
       <p
         ref={errRef}
@@ -125,6 +123,7 @@ const Login = () => {
       </form>
     </section>
   );
+  return content;
 };
 
 export default Login;

@@ -1,16 +1,15 @@
 import { Routes, Route } from "react-router-dom";
-import Layout from "./Components/Layout";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
-import LinkPage from "./Components/LinkPage";
-import Unauthorized from "./Components/Unauthorized";
-import Home from "./Components/Home";
-import Editor from "./Components/Editor";
-import Admin from "./Components/Admin";
-import Lounge from "./Components/Lounge";
-import Missing from "./Components/Missing";
-import RequireAuth from "./Components/RequireAuth";
-import PersistLogin from "./Components/PersistLogin";
+import Layout from "./components/Layout";
+import Login from "./components/Login";
+// import Register from "./components/Register";
+import LinkPage from "./components/LinkPage";
+import Unauthorized from "./components/Unauthorized";
+import Home from "./components/Home";
+import Editor from "./components/Editor";
+import Admin from "./components/Admin";
+import Lounge from "./components/Lounge";
+import Missing from "./components/Missing";
+import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
   const ROLES = {
@@ -23,12 +22,12 @@ const App = () => {
       <Route path="/" element={<Layout />}>
         {/* Public routes */}
         <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        {/* <Route path="register" element={<Register />} /> */}
         <Route path="linkpage" element={<LinkPage />} />
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* protected routes */}
-        <Route element={<PersistLogin />}>
+        {/* <Route element={<PersistLogin />}> */}
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="/" element={<Home />} />
           </Route>
@@ -43,7 +42,7 @@ const App = () => {
           >
             <Route path="lounge" element={<Lounge />} />
           </Route>
-        </Route>
+        {/* </Route> */}
 
         {/* catch all */}
         <Route path="/*" element={<Missing />} />

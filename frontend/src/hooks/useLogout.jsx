@@ -1,15 +1,16 @@
-import axios from "../api/axios";
-import useAuth from "./useAuth";
+import { logOut } from "../features/auth/authSlice";
+import { useDispatch } from "react-redux";
+import { persistor } from "../app/store";
 
 const useLogout = () => {
-	const { setAuth } = useAuth();
-	
+	// const { setAuth } = useAuth();
+	const dispatch = useDispatch();
+
 	const logout = async () => {
-		setAuth({});
+		// setAuth({});
 		try {
-			const response = await axios('/logout', {
-				withCredentials: true
-			});
+			dispatch(logOut());
+			persistor.purge();
 		} catch (err) {
 			console.error(err);
 		}

@@ -34,7 +34,7 @@ const handleLogin = async (req, res) => {
     const refreshToken = jwt.sign(
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "30s" }
+      { expiresIn: "15s" }
     );
 
     foundUser.refreshToken = refreshToken;
@@ -48,7 +48,7 @@ const handleLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });// set secure to true in production
 
-    res.json({ roles, accessToken });
+    res.json({ accessToken });
   } else {
     res.status(401).json({ message: "Incorrect password" });
   }

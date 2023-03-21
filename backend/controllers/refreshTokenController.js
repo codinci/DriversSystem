@@ -6,12 +6,12 @@ const handleRefreshToken = async (req, res) => {
   if (!cookies?.jwt) return res.sendStatus(401);
 
 
-  const refreshToken = cookies.jwt;
+  const refresh = cookies.jwt;
   //ensure user exists
-  const foundUser = await User.findOne({ refreshToken }).exec();
+  const foundUser = await User.findOne({ refresh }).exec();
   if (!foundUser) return res.sendStatus(403);
 
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+  jwt.verify(refresh, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
     if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
     const roles = Object.values(foundUser.roles);
     const accessToken = jwt.sign(
@@ -24,8 +24,8 @@ const handleRefreshToken = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "10s" }
     );
-    res.json({ roles, accessToken });
+    res.json({  accessToken });
   });
-};
+}
 
 module.exports = { handleRefreshToken };
